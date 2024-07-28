@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "engines":{
-    "node":"18"
+  "engines": {
+    "node": "18"
   },
   "scripts": {
-    "dev":"tsx src/server.ts",
-    "build":"tsup src",
-    "start":"node dist/server.js",
+    "dev": "tsx src/server.ts",
+    "build": "tsup src",
+    "start": "node dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -23,8 +23,13 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
+    "@fastify/static": "^7.0.4",
+    "@fastify/swagger": "^8.15.0",
     "@prisma/client": "^5.17.0",
+    "bcryptjs": "^2.4.3",
     "fastify": "^4.28.1",
+    "fastify-swagger": "^5.2.0",
+    "jsonwebtoken": "^9.0.2",
     "zod": "^3.23.8"
   }
 }
