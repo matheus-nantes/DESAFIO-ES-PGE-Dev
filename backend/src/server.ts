@@ -7,22 +7,24 @@ const app = fastify()
 const prisma = new PrismaClient()
 
 app.get('/users', async ()=>{
-    const users = await prisma.user.findMany()
+    const users = await prisma.usuario.findMany()
 
     return {users}
 })
 app.post('/users', async (request, reply)=>{
     const createUserSchema = z.object({
-        name: z.string(),
+        nome: z.string(),
         email: z.string().email(),
+        senha: z.string()
     })
 
-    const {name, email} = createUserSchema.parse(request.body)
+    const { email, senha, nome } = createUserSchema.parse(request.body)
 
-    await prisma.user.create({
+    await prisma.usuario.create({
         data:{
-            name,
             email,
+            senha,
+            nome
         }
     })
 
