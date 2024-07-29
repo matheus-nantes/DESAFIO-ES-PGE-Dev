@@ -7,8 +7,9 @@
     "node": "18"
   },
   "scripts": {
-    "dev": "tsx src/server.ts",
-    "build": "tsup src",
+    "dev": "tsx src/server.ts --trace-deprecation",
+    "build": "tsup src && npm run copy-swagger-docs",
+    "copy-swagger-docs": "copyfiles -u 1 src/swagger-docs.json dist",
     "start": "node dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,6 +18,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^22.0.0",
+    "copyfiles": "^2.4.1",
     "prisma": "^5.17.0",
     "tsup": "^8.2.3",
     "tsx": "^4.16.2",
@@ -25,6 +27,7 @@
   "dependencies": {
     "@fastify/static": "^7.0.4",
     "@fastify/swagger": "^8.15.0",
+    "@fastify/swagger-ui": "^4.0.1",
     "@prisma/client": "^5.17.0",
     "bcryptjs": "^2.4.3",
     "fastify": "^4.28.1",
