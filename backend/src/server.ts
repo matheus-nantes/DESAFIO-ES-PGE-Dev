@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+import prisma from './prismaClient'
 import fastify, { FastifyRequest, FastifyReply } from 'fastify'
 import { z } from 'zod'
 import bcrypt from 'bcryptjs'
@@ -10,7 +10,6 @@ import path from 'path'
 import { readFileSync } from 'fs'
 
 const app = fastify()
-const prisma = new PrismaClient()
 
 const SECRET_KEY = 'your-secret-key'
 
