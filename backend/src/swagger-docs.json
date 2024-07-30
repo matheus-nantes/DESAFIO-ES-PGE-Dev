@@ -14,19 +14,19 @@
   "tags": [
     {
       "name": "Usuario",
-      "description": "Endpoints relaionados a usuários"
+      "description": "Endpoints relacionados a usuários"
     },
     {
       "name": "Autenticação",
-      "description": "Endpoints relaionados a Autenticação"
+      "description": "Endpoints relacionados a Autenticação"
     },
     {
       "name": "Processo",
-      "description": "Endpoints relaionados a Processos"
+      "description": "Endpoints relacionados a Processos"
     },
     {
       "name": "Movimentação",
-      "description": "Endpoints relaionados a Movementações"
+      "description": "Endpoints relacionados a Movimentações"
     }
   ],
   "paths": {
@@ -272,6 +272,54 @@
                       "properties": {
                         "id": { "type": "integer" },
                         "tipo": { "type": "string" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/movimentacao": {
+      "post": {
+        "tags": ["Movimentacao"],
+        "summary": "Criar uma nova movimentação",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "processoId": { "type": "integer" },
+                  "tipo": { "type": "string" }
+                },
+                "required": ["processoId", "tipo"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Movimentação criada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "movimentacao": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer" },
+                        "processoId": { "type": "integer" },
+                        "tipo": { "type": "string" },
+                        "data": {"type": "string"},
+                        "descricao": {"type": "string"}
                       }
                     }
                   }

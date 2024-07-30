@@ -238,6 +238,39 @@ app.put('/movimentacao/:id', async (request: FastifyRequest, reply: FastifyReply
   }
 })
 
+// Documentação para o endpoint POST /movimentacao
+app.post('/movimentacao', async (request: FastifyRequest, reply: FastifyReply) => {
+    const createMovimentacaoSchema = z.object({
+      data: z.string(),
+      tipo: z.string(),
+      descricao: z.string().optional(),
+      processoId: z.number(),
+    })
+  
+    const { data, tipo, descricao, processoId } = createMovimentacaoSchema.parse(request.body)
+  
+    const movimentacao = await prisma.movimentacao.create({
+      data: {
+        data: new Date(data),
+        tipo,
+        descricao: descricao ?? '',
+        processoId,
+      },
+    })
+  
+    if (tipo === 'penhora') {
+      const dataPrescricao = new Date(movimentacao.data)
+      dataPrescricao.setFullYear(dataPrescricao.getFullYear() + 6)
+  
+      await prisma.processo.update({
+        where: { numero: processoId },
+        data: { dataPrescricao },
+      })
+    }
+  
+    return reply.status(201).send({ movimentacao })
+  })
+
 app.listen({
   port: 3333,
   host: '0.0.0.0',
