@@ -1,0 +1,351 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API Documentation",
+    "version": "1.0.0",
+    "description": "API documentation for your application"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3333",
+      "description": "Local server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Usuario",
+      "description": "Endpoints relacionados a usuários"
+    },
+    {
+      "name": "Autenticação",
+      "description": "Endpoints relacionados a Autenticação"
+    },
+    {
+      "name": "Processo",
+      "description": "Endpoints relacionados a Processos"
+    },
+    {
+      "name": "Movimentação",
+      "description": "Endpoints relacionados a Movimentações"
+    }
+  ],
+  "paths": {
+    "/usuario": {
+      "get": {
+        "tags": ["Usuario"],
+        "summary": "Obter todos usuários",
+        "responses": {
+          "200": {
+            "description": "Lista de usuários",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "users": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": { "type": "integer" },
+                          "nome": { "type": "string" },
+                          "email": { "type": "string" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Usuario"],
+        "summary": "Criar um novo usuário",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": { "type": "string" },
+                  "email": { "type": "string", "format": "email" },
+                  "senha": { "type": "string", "minLength": 6 }
+                },
+                "required": ["nome", "email", "senha"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Usuario criado"
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": ["Autenticação"],
+        "summary": "Login",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string", "format": "email" },
+                  "senha": { "type": "string" }
+                },
+                "required": ["email", "senha"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login efetuado com sucesso!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Credenciais inválidas"
+          }
+        }
+      }
+    },
+    "/processo/{numero}": {
+      "get": {
+        "tags": ["Processo"],
+        "summary": "Obter um processo pelo número",
+        "parameters": [
+          {
+            "name": "numero",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do processo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "processo": {
+                      "type": "object",
+                      "properties": {
+                        "numero": { "type": "integer" },
+                        "descricao": { "type": "string" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Processo não encontrado"
+          }
+        }
+      }
+    },
+    "/processo": {
+      "get": {
+        "tags": ["Processo"],
+        "summary": "Obter todos os processos",
+        "responses": {
+          "200": {
+            "description": "Lista de processos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "processos": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "numero": { "type": "integer" },
+                          "descricao": { "type": "string" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/me/processo": {
+      "get": {
+        "tags": ["Processo"],
+        "summary": "Obter processos de um usuário",
+        "responses": {
+          "200": {
+            "description": "Lista de processos pesquisados pelo usuário",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "processos": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "numero": { "type": "integer" },
+                          "descricao": { "type": "string" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/movimentacao/{id}": {
+      "put": {
+        "tags": ["Movimentacao"],
+        "summary": "Atualiza uma movimentação pelo ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tipo": { "type": "string" }
+                },
+                "required": ["tipo"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Movimentação atualizada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "movimentacao": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer" },
+                        "tipo": { "type": "string" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/movimentacao": {
+      "post": {
+        "tags": ["Movimentacao"],
+        "summary": "Criar uma nova movimentação",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "processoId": { "type": "integer" },
+                  "tipo": { "type": "string" }
+                },
+                "required": ["processoId", "tipo"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Movimentação criada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "movimentacao": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer" },
+                        "processoId": { "type": "integer" },
+                        "tipo": { "type": "string" },
+                        "data": {"type": "string"},
+                        "descricao": {"type": "string"}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ]
+}

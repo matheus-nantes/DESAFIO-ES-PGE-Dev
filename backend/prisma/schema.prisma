@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Usuario {
+  id            Int               @id @default(autoincrement())
+  email         String            @unique
+  senha         String
+  nome          String
+  processos     UsuarioProcesso[]
+}
+
+model Processo {
+  numero        Int               @id
+  valorDivida   Float
+  juiz          String
+  distribuicao  String?
+  vara          String
+  dataPrescricao DateTime?
+  executado     String?
+  assunto       String?
+  foro          String?
+  controle      String?
+  movimentacoes Movimentacao[]
+  usuarios      UsuarioProcesso[]
+}
+
+model Movimentacao {
+  id            Int      @id @default(autoincrement())
+  data          DateTime
+  tipo          String
+  descricao     String
+  processoId    Int
+  processo      Processo @relation(fields: [processoId], references: [numero])
+}
+
+model UsuarioProcesso {
+  id            Int      @id @default(autoincrement())
+  usuarioId     Int
+  processoId    Int
+  createdAt     DateTime @default(now())
+  usuario       Usuario  @relation(fields: [usuarioId], references: [id])
+  processo      Processo @relation(fields: [processoId], references: [numero])
+
+  @@unique([usuarioId, processoId])
+}
